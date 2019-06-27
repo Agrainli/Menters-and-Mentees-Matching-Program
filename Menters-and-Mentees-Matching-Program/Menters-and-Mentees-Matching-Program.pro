@@ -27,6 +27,7 @@ CONFIG += c++11
 SOURCES += \
         delegate_training.cpp \
         delegate_wwvp.cpp \
+        dialog_about.cpp \
         main.cpp \
         mainwindow.cpp \
         mainwindow_algorithm.cpp \
@@ -38,9 +39,11 @@ SOURCES += \
 HEADERS += \
         delegate_training.h \
         delegate_wwvp.h \
+        dialog_about.h \
         mainwindow.h
 
 FORMS += \
+        dialog_about.ui \
         mainwindow.ui
 
 # Default rules for deployment.

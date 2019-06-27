@@ -19,6 +19,9 @@
 #include <delegate_training.h>
 #include <delegate_wwvp.h>
 
+#include <dialog_about.h>
+#include <QMessageBox>
+
 # define MY_DATA_BASE_NAME "db_mm.db"
 # define MY_DATABASE_DEMO_NAME "db_mm_demo.db"
 
@@ -89,8 +92,14 @@ private slots:
 
     void edit_finished();
 
+    void on_actionAbout_triggered();
+
+    void on_actionAbout_Qt_triggered();
+
 private:
     Ui::MainWindow *ui;
+
+    Dialog_About about;
 
     // ------------------------------------
 

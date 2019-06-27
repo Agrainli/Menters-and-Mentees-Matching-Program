@@ -562,8 +562,16 @@
     <addaction name="actionManage_Mentees"/>
     <addaction name="actionManage_Matching"/>
    </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+    <addaction name="actionAbout_Qt"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuFunction"/>
+   <addaction name="menuAbout"/>
   </widget>
   <action name="actionImport_Mentors">
    <property name="text">
@@ -622,6 +630,16 @@
   <action name="actionExport_Wattle_File">
    <property name="text">
     <string>Export Wattle File</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About This Program</string>
+   </property>
+  </action>
+  <action name="actionAbout_Qt">
+   <property name="text">
+    <string>About Qt</string>
    </property>
   </action>
  </widget>

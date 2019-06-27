@@ -25,6 +25,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionManage_Mentors->setChecked(true);
     qDebug() << "Switch to Mentors Page";
 
+    // init about page
+    about.setWindowFlags(Qt::WindowCloseButtonHint);
+    about.setFixedSize(240,188);
+
 }
 
 MainWindow::~MainWindow()
@@ -166,5 +170,12 @@ void MainWindow::on_actionManage_Matching_triggered()
 
 }
 
+void MainWindow::on_actionAbout_triggered()
+{
+    about.show();
+}
 
-
+void MainWindow::on_actionAbout_Qt_triggered()
+{
+    QMessageBox::aboutQt(this,"About Qt");
+}
