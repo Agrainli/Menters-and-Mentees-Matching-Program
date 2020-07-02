@@ -6,7 +6,8 @@
 // load
 void MainWindow::load_mentors()
 {
-    // disconnect
+    // disconnect(show the original content instead of number. Example gender:male 0 female 1.
+    // use disconnect will show word male and female. not use disconnect will show 0 1 2 3 )
     disconnect(ui->checkBox_mentors_gender,&QCheckBox::stateChanged,this,&MainWindow::display_mentors_column);
     disconnect(ui->checkBox_mentors_academic_info,&QCheckBox::stateChanged,this,&MainWindow::display_mentors_column);
     disconnect(ui->checkBox_mentors_type,&QCheckBox::stateChanged,this,&MainWindow::display_mentors_column);
@@ -19,32 +20,32 @@ void MainWindow::load_mentors()
     disconnect(ui->checkBox_mentors_round,&QCheckBox::stateChanged,this,&MainWindow::display_mentors_column);
     disconnect(ui->checkBox_mentors_confirmation,&QCheckBox::stateChanged,this,&MainWindow::display_mentors_column);
 
-    // clear exist data
-    if ( model_mentors != nullptr )
+    // clear exist data(model_mentors is a private pointer)
+    if ( model_mentors != nullptr )//if pointer not equal to nullptr
     {
-        delete model_mentors;
-        model_mentors = nullptr;
+        delete model_mentors;// delete it
+        model_mentors = nullptr;//build a  new a nullptr pointer named model_mentors
     }
 
-    // link db to mentors QSqlTableModel
-    model_mentors = new QSqlTableModel(this,db);    // model_mentors is a private pointer defined in header file
-    model_mentors->setTable("mentor");
-    model_mentors->setEditStrategy(QSqlTableModel::OnFieldChange);
-    model_mentors->select();
-    while(model_mentors->canFetchMore()){
-        model_mentors->fetchMore();
+    // link db to mentors QSqlTableModel()(db to QSqlTableModel)
+    model_mentors = new QSqlTableModel(this,db); // model_mentors is a private pointer defined in header file
+    model_mentors->setTable("mentor");//set the pointer to the table "mentor"
+    model_mentors->setEditStrategy(QSqlTableModel::OnFieldChange);//set the editstrategy
+    model_mentors->select();//populate the model with data from table that set via setTable()
+    while(model_mentors->canFetchMore()){//if pointer can fetch more
+        model_mentors->fetchMore();//Fetches more rows from a database
     }
 
-    // link mentors QSqlTableModel to QTableView
+    // link mentors QSqlTableModel to QTableView(QSqlTableModel to QTableView)
     ui->tableView_mentors->setModel(model_mentors);
     ui->tableView_mentors->reset();
     ui->tableView_mentors->horizontalHeader()->setMaximumSectionSize(400);
     ui->tableView_mentors->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     // hide group id
-    ui->tableView_mentors->hideColumn(0);
+    ui->tableView_mentors->hideColumn(0);//hide the first column0(group id)
 
-    // delegate
+    // delegate(The function of delegate is to decide show number or specific name)
     ui->tableView_mentors->setItemDelegateForColumn(1,delegate_yes_no);
     ui->tableView_mentors->setItemDelegateForColumn(17,delegate_yes_no);
     ui->tableView_mentors->setItemDelegateForColumn(18,delegate_yes_no);
@@ -58,14 +59,12 @@ void MainWindow::load_mentors()
     ui->tableView_mentors->setItemDelegateForColumn(8,delegate_college);
     ui->tableView_mentors->setItemDelegateForColumn(15,delegate_special_mentors);
 
-    ui->tableView_mentors->resizeColumnsToContents();
-    ui->tableView_mentors->resizeRowsToContents();
 
-    // resize row height according to column width
-    //connect(ui->tableView_mentors->horizontalHeader(),&QHeaderView::sectionResized,
-    //        ui->tableView_mentors,&QTableView::resizeRowsToContents);
+    ui->tableView_mentors->resizeRowsToContents();//resize row size to contents
+    ui->tableView_mentors->resizeColumnsToContents();//resize column size to contents
 
-    // connect
+
+    // connect(connect ui->checkBox_mentors to QCheckBox)
     connect(ui->checkBox_mentors_gender,&QCheckBox::stateChanged,this,&MainWindow::display_mentors_column);
     connect(ui->checkBox_mentors_academic_info,&QCheckBox::stateChanged,this,&MainWindow::display_mentors_column);
     connect(ui->checkBox_mentors_type,&QCheckBox::stateChanged,this,&MainWindow::display_mentors_column);
@@ -81,7 +80,7 @@ void MainWindow::load_mentors()
     connect(model_mentors,&QAbstractItemModel::dataChanged,this,&MainWindow::edit_finished);
 }
 
-// search
+// search(search function is to find the mentors according key words)
 void MainWindow::on_lineEdit_mentors_search_editingFinished()
 {
     QString str = ui->lineEdit_mentors_search->text().trimmed();    // Returns a string that has whitespace removed from the start and the end
@@ -104,7 +103,7 @@ void MainWindow::on_lineEdit_mentors_search_editingFinished()
     model_mentors->setFilter(argument);
 }
 
-// delete
+// delete button function to delete specific row
 void MainWindow::on_pushButton_mentors_delete_clicked()
 {
     while (model_mentors->canFetchMore())
@@ -128,11 +127,11 @@ void MainWindow::on_pushButton_mentors_delete_clicked()
                                        "deleting the connection: ") + err.text());
         }
     }
-
     load_mentors();
 }
 
-void MainWindow::display_mentors_column()
+
+void MainWindow::display_mentors_column()//show each mentors column according to tickbox
 {
     // confirmation
     if (ui->checkBox_mentors_confirmation->isChecked())
@@ -258,7 +257,7 @@ void MainWindow::display_mentors_column()
 
 }
 
-void MainWindow::edit_finished()
+void MainWindow::edit_finished()//three training tick function
 {
     while(model_mentors->canFetchMore())
     {

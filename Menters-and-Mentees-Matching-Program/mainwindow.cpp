@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QDir().mkdir(tmp_path);  //qDebug() << "tmp Path" << tmp_path;
 
     // init database
-    init_database(tmp_path);
+    init_database(tmp_path);///////
 
     // switch to mentors' page
     ui->stack->setCurrentIndex(0);      // qDebug() << "Switch to Mentors Page";
@@ -24,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionMentors_Grouping->setChecked(false);
     ui->actionMentees_Grouping->setChecked(false);
 
-    // delegate
     delegate_yes_no = new Delegate_Yes_No(this);
     delegate_yes_no_disp = new Delegate_Yes_No_Disp(this);
     delegate_round = new Delegate_Round(this);
