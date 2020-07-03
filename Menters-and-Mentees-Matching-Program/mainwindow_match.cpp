@@ -62,13 +62,13 @@ void MainWindow::load_match_mentees()
     ui->tableView_match_mentors->resizeRowsToContents();
 
 
-    ui->tableView_match_mentors->hideColumn(0);
-    ui->tableView_match_mentors->hideColumn(1);
-    ui->tableView_match_mentors->hideColumn(5);
-    ui->tableView_match_mentors->hideColumn(17);
-    ui->tableView_match_mentors->hideColumn(18);
-    ui->tableView_match_mentors->hideColumn(19);
-    ui->tableView_match_mentors->hideColumn(20);
+    ui->tableView_match_mentors->hideColumn(0);//group ID
+    ui->tableView_match_mentors->hideColumn(1);//is_confirmed
+    ui->tableView_match_mentors->hideColumn(5);//wwvp
+    ui->tableView_match_mentors->hideColumn(17);//train_1
+    ui->tableView_match_mentors->hideColumn(18);//train_2
+    ui->tableView_match_mentors->hideColumn(19);//train_3
+    ui->tableView_match_mentors->hideColumn(20);//train
 
     // -----------------------------------------------------------------------------------
     // [2] matched mentees
@@ -156,14 +156,15 @@ void MainWindow::load_match_mentees()
     ui->tableView_match_mentees_to_be_match->setItemDelegateForColumn(6,delegate_college);
     ui->tableView_match_mentees_to_be_match->setItemDelegateForColumn(12,delegate_special_mentees);
 
+    // hide group id
     ui->tableView_match_mentees_to_be_match->hideColumn(0);
 
     // resize row height according to column width
     ui->tableView_match_mentees_to_be_match->resizeColumnsToContents();
     ui->tableView_match_mentees_to_be_match->resizeRowsToContents();
-    //connect(ui->tableView_match_mentees_to_be_match->horizontalHeader(),&QHeaderView::sectionResized,
-    //        ui->tableView_match_mentees_to_be_match,&QTableView::resizeRowsToContents);
 
+
+    // connect(connect ui->checkBox_mentors to QCheckBox)
     connect(ui->checkBox_match_gender,&QCheckBox::stateChanged,this,&MainWindow::display_match_column);
     connect(ui->checkBox_match_academic_info,&QCheckBox::stateChanged,this,&MainWindow::display_match_column);
     connect(ui->checkBox_match_type,&QCheckBox::stateChanged,this,&MainWindow::display_match_column);
@@ -174,6 +175,7 @@ void MainWindow::load_match_mentees()
     connect(ui->checkBox_match_round,&QCheckBox::stateChanged,this,&MainWindow::display_match_column);
 }
 
+//Click on the left table, the two match mentors will be selected together
 void MainWindow::on_tableView_match_mentors_clicked(const QModelIndex &index)
 {
     // Selected Row
@@ -196,6 +198,7 @@ void MainWindow::on_tableView_match_mentors_clicked(const QModelIndex &index)
     ui->tableView_match_mentees_matched->resizeRowsToContents();
 }
 
+//The right side up button function. Get the selected ungrouped mentee into the grouped mentee
 void MainWindow::on_pushButton_Up_clicked()
 {
     int row = ui->tableView_match_mentors->currentIndex().row();
@@ -220,6 +223,7 @@ void MainWindow::on_pushButton_Up_clicked()
     ui->tableView_match_mentees_to_be_match->resizeRowsToContents();
 }
 
+//The left side up button function. Get the selected grouped mentee into the ungrouped mentee
 void MainWindow::on_pushButton_Down_clicked()
 {
     QItemSelectionModel * selections = ui->tableView_match_mentees_matched->selectionModel();
@@ -241,6 +245,7 @@ void MainWindow::on_pushButton_Down_clicked()
     ui->tableView_match_mentees_to_be_match->resizeRowsToContents();
 }
 
+//clear all the grouped mentees in the top right side and remove them to the bottom right side
 void MainWindow::on_pushButton_Clear_clicked()
 {
     QSqlQuery query(db);
@@ -255,6 +260,7 @@ void MainWindow::on_pushButton_Clear_clicked()
     ui->tableView_match_mentees_to_be_match->resizeRowsToContents();
 }
 
+//search the editing mentors
 void MainWindow::on_lineEdit_match_search_mentors_editingFinished()
 {
     QString str = ui->lineEdit_match_search_mentors->text().simplified();    // Returns a string that has whitespace removed from the start and the end
@@ -274,6 +280,7 @@ void MainWindow::on_lineEdit_match_search_mentors_editingFinished()
     model_match_mentors->setFilter(argument);
 }
 
+//search the editing mentees
 void MainWindow::on_lineEdit_match_search_mentees_editingFinished()
 {
     QString str = ui->lineEdit_match_search_mentees->text().simplified();    // Returns a string that has whitespace removed from the start and the end
@@ -293,6 +300,7 @@ void MainWindow::on_lineEdit_match_search_mentees_editingFinished()
     model_match_mentees_to_be_match->setFilter(argument);
 }
 
+//auto match each mentees column
 void MainWindow::on_pushButton_Auto_clicked()
 {
     algorithm_mentees_match();
@@ -306,6 +314,7 @@ void MainWindow::on_pushButton_Auto_clicked()
     ui->tableView_match_mentees_to_be_match->resizeRowsToContents();
 }
 
+//show each mentors column according to tickbox
 void MainWindow::display_match_column()
 {
     // round

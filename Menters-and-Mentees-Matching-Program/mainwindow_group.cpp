@@ -3,6 +3,8 @@
 
 void MainWindow::load_group_mentors()
 {
+    // disconnect(show the original content instead of number. Example gender:male 0 female 1.
+    // use disconnect will show word male and female. not use disconnect will show 0 1 2 3 )
     disconnect(ui->checkBox_group_mentor_hall,&QCheckBox::stateChanged,this,&MainWindow::display_group_column);
     disconnect(ui->checkBox_group_mentor_type,&QCheckBox::stateChanged,this,&MainWindow::display_group_column);
     disconnect(ui->checkBox_group_mentor_round,&QCheckBox::stateChanged,this,&MainWindow::display_group_column);
@@ -14,14 +16,14 @@ void MainWindow::load_group_mentors()
 
     // mentors to be grouped
 
-    // clear exist data
+    // clear exist data(model_mentors is a private pointer)
     if ( model_group_mentors_to_be_grouped != nullptr )
     {
         delete model_group_mentors_to_be_grouped;
         model_group_mentors_to_be_grouped = nullptr;
     }
 
-    // link db to mentors QSqlTableModel
+    // link db to mentors QSqlTableModel(db to QSqlTableModel)
     model_group_mentors_to_be_grouped = new QSqlTableModel(this,db);    // model_mentors is a private pointer defined in header file
     model_group_mentors_to_be_grouped->setTable("mentor");
     model_group_mentors_to_be_grouped->setEditStrategy(QSqlTableModel::OnFieldChange);
@@ -31,17 +33,17 @@ void MainWindow::load_group_mentors()
         model_group_mentors_to_be_grouped->fetchMore();
     }
 
-    // link mentors QSqlTableModel to QTableView
+    // link mentors QSqlTableModel to QTableView(QSqlTableModel to QTableView)
     ui->tableView_group_mentor_to_be_group->setModel(model_group_mentors_to_be_grouped);
     ui->tableView_group_mentor_to_be_group->reset();
     ui->tableView_group_mentor_to_be_group->horizontalHeader()->setMaximumSectionSize(400);
     ui->tableView_group_mentor_to_be_group->setSortingEnabled(true);
 
+    //the right window select behaviour
     ui->tableView_group_mentor_to_be_group->setSelectionBehavior(QAbstractItemView::SelectRows);
-    //ui->tableView_group_mentor_to_be_group->setSelectionMode(QAbstractItemView::MultiSelection);
     ui->tableView_group_mentor_to_be_group->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-    // delegate
+    // delegate(The function of delegate is to decide show number or specific name)
     ui->tableView_group_mentor_to_be_group->setItemDelegateForColumn(1,delegate_yes_no);
     ui->tableView_group_mentor_to_be_group->setItemDelegateForColumn(17,delegate_yes_no);
     ui->tableView_group_mentor_to_be_group->setItemDelegateForColumn(18,delegate_yes_no);
@@ -58,17 +60,15 @@ void MainWindow::load_group_mentors()
     // resize row height according to column width
     ui->tableView_group_mentor_to_be_group->resizeColumnsToContents();
     ui->tableView_group_mentor_to_be_group->resizeRowsToContents();
-    //connect(ui->tableView_group_mentor_to_be_group->horizontalHeader(),&QHeaderView::sectionResized,
-    //        ui->tableView_group_mentor_to_be_group,&QTableView::resizeRowsToContents);
 
     // hide columns
-    ui->tableView_group_mentor_to_be_group->hideColumn(0);
-    ui->tableView_group_mentor_to_be_group->hideColumn(1);
-    ui->tableView_group_mentor_to_be_group->hideColumn(5);
-    ui->tableView_group_mentor_to_be_group->hideColumn(17);
-    ui->tableView_group_mentor_to_be_group->hideColumn(18);
-    ui->tableView_group_mentor_to_be_group->hideColumn(19);
-    ui->tableView_group_mentor_to_be_group->hideColumn(20);
+    ui->tableView_group_mentor_to_be_group->hideColumn(0);//group ID
+    ui->tableView_group_mentor_to_be_group->hideColumn(1);//is_confirmed
+    ui->tableView_group_mentor_to_be_group->hideColumn(5);//wwvp
+    ui->tableView_group_mentor_to_be_group->hideColumn(17);//train_1
+    ui->tableView_group_mentor_to_be_group->hideColumn(18);//train_2
+    ui->tableView_group_mentor_to_be_group->hideColumn(19);//train_3
+    ui->tableView_group_mentor_to_be_group->hideColumn(20);//train
 
     //--------------------------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------------------------
@@ -135,6 +135,7 @@ void MainWindow::load_group_mentors()
     ui->tableView_group_mentor_grouped->setEditTriggers(QAbstractItemView::NoEditTriggers);
     */
 
+    // connect(connect ui->checkBox_mentors to QCheckBox)
     connect(ui->checkBox_group_mentor_hall,&QCheckBox::stateChanged,this,&MainWindow::display_group_column);
     connect(ui->checkBox_group_mentor_type,&QCheckBox::stateChanged,this,&MainWindow::display_group_column);
     connect(ui->checkBox_group_mentor_round,&QCheckBox::stateChanged,this,&MainWindow::display_group_column);
@@ -145,7 +146,7 @@ void MainWindow::load_group_mentors()
     connect(ui->checkBox_group_mentor_academic_info,&QCheckBox::stateChanged,this,&MainWindow::display_group_column);
 }
 
-// Grouped mentor search
+// Grouped mentor search(It is a function in the left below)
 void MainWindow::on_lineEdit_group_mentor_grouped_search_editingFinished()
 {
     QString str = ui->lineEdit_group_mentor_grouped_search->text().simplified();    // Returns a string that has whitespace removed from the start and the end
@@ -167,7 +168,7 @@ void MainWindow::on_lineEdit_group_mentor_grouped_search_editingFinished()
 
 
 
-// To be grouped mentor search
+// To be grouped mentor search(It is a function in the right below)
 void MainWindow::on_lineEdit_group_mentor_to_be_group_search_editingFinished()
 {
     QString str = ui->lineEdit_group_mentor_to_be_group_search->text().simplified();    // Returns a string that has whitespace removed from the start and the end
@@ -187,7 +188,7 @@ void MainWindow::on_lineEdit_group_mentor_to_be_group_search_editingFinished()
     model_group_mentors_to_be_grouped->setFilter(argument);
 }
 
-// Add to Group
+// Add to Group(get the mentor from the right side and remove it into the left side)
 void MainWindow::on_toolButton_left_clicked()
 {
     QItemSelectionModel * selections_grouped = ui->tableView_group_mentor_grouped->selectionModel();
@@ -230,7 +231,7 @@ void MainWindow::on_toolButton_left_clicked()
     ui->tableView_group_mentor_to_be_group->resizeRowsToContents();
 }
 
-// Remove from group
+// Remove from group(get the mentor from the left side and remove it into the left side)
 void MainWindow::on_toolButton_right_clicked()
 {
     QItemSelectionModel * selections = ui->tableView_group_mentor_grouped->selectionModel();
@@ -289,6 +290,7 @@ void MainWindow::on_toolButton_right_clicked()
     ui->tableView_group_mentor_to_be_group->resizeRowsToContents();
 }
 
+//auto group mentor event(call the algorithm_mentors_group()function)
 void MainWindow::on_pushButton_mentor_auto_clicked()
 {
     algorithm_mentors_group();
@@ -302,6 +304,7 @@ void MainWindow::on_pushButton_mentor_auto_clicked()
     ui->tableView_group_mentor_to_be_group->resizeRowsToContents();
 }
 
+//clear all the mentors in the lift side and remove them to the right side
 void MainWindow::on_pushButton_mentor_clear_clicked()
 {
     QSqlQuery query(db);
@@ -317,6 +320,7 @@ void MainWindow::on_pushButton_mentor_clear_clicked()
     ui->tableView_group_mentor_to_be_group->resizeRowsToContents();
 }
 
+//show each mentors column according to tickbox
 void MainWindow::display_group_column()
 {
     // round

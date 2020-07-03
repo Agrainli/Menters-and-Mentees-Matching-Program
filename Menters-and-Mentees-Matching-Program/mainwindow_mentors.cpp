@@ -27,7 +27,7 @@ void MainWindow::load_mentors()
         model_mentors = nullptr;//build a  new a nullptr pointer named model_mentors
     }
 
-    // link db to mentors QSqlTableModel()(db to QSqlTableModel)
+    // link db to mentors QSqlTableModel(db to QSqlTableModel)
     model_mentors = new QSqlTableModel(this,db); // model_mentors is a private pointer defined in header file
     model_mentors->setTable("mentor");//set the pointer to the table "mentor"
     model_mentors->setEditStrategy(QSqlTableModel::OnFieldChange);//set the editstrategy

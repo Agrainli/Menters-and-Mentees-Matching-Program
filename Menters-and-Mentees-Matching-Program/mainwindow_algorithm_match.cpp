@@ -10,10 +10,12 @@ void MainWindow::MainWindow::algorithm_mentees_match()
     int gender = ui->comboBox_gender->currentIndex();
     int language = ui->comboBox_language->currentIndex();
     int special = ui->comboBox_special->currentIndex();
+    int u18
     int request = ui->comboBox_request->currentIndex();     // 0 - Leave Out    1 - Manual Match
 
     int max_mentees_num = ui->spinBox_mentees_num->value();
 
+    //round
     switch (round) {
     case 0: round = 0; break;
     case 1: round = 1; break;
@@ -23,6 +25,7 @@ void MainWindow::MainWindow::algorithm_mentees_match()
     default: round = 0; break;
     }
 
+    //level
     switch (level) {
     case 0: level = 0; break;
     case 1: level = 1; break;
@@ -32,6 +35,7 @@ void MainWindow::MainWindow::algorithm_mentees_match()
     default: level = 0; break;
     }
 
+    //college
     switch (college) {
     case 0: college = 0; break;
     case 1: college = 1; break;
@@ -41,6 +45,7 @@ void MainWindow::MainWindow::algorithm_mentees_match()
     default: college = 0; break;
     }
 
+    //type
     switch (type) {
     case 0: type = 0; break;
     case 1: type = 1; break;
@@ -50,6 +55,7 @@ void MainWindow::MainWindow::algorithm_mentees_match()
     default: type = 0; break;
     }
 
+    //gender
     switch (gender) {
     case 0: gender = 0; break;
     case 1: gender = 1; break;
@@ -59,6 +65,7 @@ void MainWindow::MainWindow::algorithm_mentees_match()
     default: gender = 0; break;
     }
 
+    //language
     switch (language) {
     case 0: language = 0; break;
     case 1: language = 3; break;
@@ -67,6 +74,7 @@ void MainWindow::MainWindow::algorithm_mentees_match()
     default: language = 0; break;
     }
 
+    //special
     switch (special) {
     case 0: special = 0; break;
     case 1: special = 3; break;
