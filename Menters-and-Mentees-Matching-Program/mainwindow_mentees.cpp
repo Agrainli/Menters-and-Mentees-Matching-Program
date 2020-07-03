@@ -6,7 +6,8 @@
 // load
 void MainWindow::load_mentees()
 {
-    // connect
+    // disconnect(show the original content instead of number. Example gender:male 0 female 1.
+    // use disconnect will show word male and female. not use disconnect will show 0 1 2 3 )
     disconnect(ui->checkBox_mentees_gender,&QCheckBox::stateChanged,this,&MainWindow::display_mentees_column);
     disconnect(ui->checkBox_mentees_academic_info,&QCheckBox::stateChanged,this,&MainWindow::display_mentees_column);
     disconnect(ui->checkBox_mentees_type,&QCheckBox::stateChanged,this,&MainWindow::display_mentees_column);
@@ -15,14 +16,14 @@ void MainWindow::load_mentees()
     disconnect(ui->checkBox_mentees_special_categories,&QCheckBox::stateChanged,this,&MainWindow::display_mentees_column);
     disconnect(ui->checkBox_mentees_round,&QCheckBox::stateChanged,this,&MainWindow::display_mentees_column);
 
-    // clear exist data
-    if ( model_mentees != nullptr )
+    // clear exist data(model_mentors is a private pointer)
+    if ( model_mentees != nullptr )//if pointer not equal to nullptr
     {
-        delete model_mentees;
-        model_mentees = nullptr;
+        delete model_mentees;// delete it
+        model_mentees = nullptr;//build a  new a nullptr pointer named model_mentors
     }
 
-    // link db to mentees QSqlTableModel
+    // link db to mentees QSqlTableModel(db to QSqlTableModel)
     model_mentees = new QSqlTableModel(this,db);    // model_mentees is a private pointer defined in header file
     model_mentees->setTable("mentee");
     model_mentees->setEditStrategy(QSqlTableModel::OnFieldChange);
@@ -31,16 +32,16 @@ void MainWindow::load_mentees()
         model_mentees->fetchMore();
     }
 
-    // link mentees QSqlTableModel to QTableView
+    // link mentees QSqlTableModel to QTableView(QSqlTableModel to QTableView)
     ui->tableView_mentees->setModel(model_mentees);
     ui->tableView_mentees->reset();
     ui->tableView_mentees->horizontalHeader()->setMaximumSectionSize(400);
     ui->tableView_mentees->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     // hide group id
-    ui->tableView_mentees->hideColumn(0);
+    ui->tableView_mentees->hideColumn(0);//hide the first column0(group id)
 
-    // delegate
+    // delegate(The function of delegate is to decide show number or specific name)
     ui->tableView_mentees->setItemDelegateForColumn(4,delegate_round);
     ui->tableView_mentees->setItemDelegateForColumn(5,delegate_academic_level);
     ui->tableView_mentees->setItemDelegateForColumn(8,delegate_type);
@@ -52,10 +53,8 @@ void MainWindow::load_mentees()
     ui->tableView_mentees->resizeColumnsToContents();
     ui->tableView_mentees->resizeRowsToContents();
 
-    //connect(ui->tableView_mentees->horizontalHeader(),&QHeaderView::sectionResized,
-    //        ui->tableView_mentees,&QTableView::resizeRowsToContents);
 
-    // connect
+    // connect(connect ui->checkBox_mentors to QCheckBox)
     connect(ui->checkBox_mentees_gender,&QCheckBox::stateChanged,this,&MainWindow::display_mentees_column);
     connect(ui->checkBox_mentees_academic_info,&QCheckBox::stateChanged,this,&MainWindow::display_mentees_column);
     connect(ui->checkBox_mentees_type,&QCheckBox::stateChanged,this,&MainWindow::display_mentees_column);
@@ -65,7 +64,7 @@ void MainWindow::load_mentees()
     connect(ui->checkBox_mentees_round,&QCheckBox::stateChanged,this,&MainWindow::display_mentees_column);
 }
 
-// search
+// search(search function is to find the mentors according key words)
 void MainWindow::on_lineEdit_mentees_search_editingFinished()
 {
     QString str = ui->lineEdit_mentees_search->text().trimmed();    // Returns a string that has whitespace removed from the start and the end
@@ -88,7 +87,7 @@ void MainWindow::on_lineEdit_mentees_search_editingFinished()
     model_mentees->setFilter(argument);
 }
 
-// delete
+// delete button function to delete specific row
 void MainWindow::on_pushButton_mentees_delete_clicked()
 {
     while(model_mentees->canFetchMore())
@@ -116,7 +115,7 @@ void MainWindow::on_pushButton_mentees_delete_clicked()
     load_mentees();
 }
 
-void MainWindow::display_mentees_column()
+void MainWindow::display_mentees_column()//show each mentors column according to tickbox
 {
     // round
     if (ui->checkBox_mentees_round->isChecked())
