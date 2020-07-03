@@ -3,7 +3,8 @@
 
 void MainWindow::load_match_mentees()
 {
-    // connect
+    // disconnect(show the original content instead of number. Example gender:male 0 female 1.
+    // use disconnect will show word male and female. not use disconnect will show 0 1 2 3 )
     disconnect(ui->checkBox_match_gender,&QCheckBox::stateChanged,this,&MainWindow::display_match_column);
     disconnect(ui->checkBox_match_academic_info,&QCheckBox::stateChanged,this,&MainWindow::display_match_column);
     disconnect(ui->checkBox_match_type,&QCheckBox::stateChanged,this,&MainWindow::display_match_column);
@@ -15,14 +16,14 @@ void MainWindow::load_match_mentees()
 
     // [1] grouped mentors
 
-    // clear exist data
+    // clear exist data(model_mentors is a private pointer)
     if ( model_match_mentors != nullptr )
     {
         delete model_match_mentors;
         model_match_mentors = nullptr;
     }
 
-    // link db to mentors QSqlTableModel
+    // link db to mentors QSqlTableModel(db to QSqlTableModel)
     model_match_mentors = new my_QSqlTableModel_Grouping(this,db);    // model_mentors is a private pointer defined in header file
     model_match_mentors->setTable("mentor");
     model_match_mentors->setEditStrategy(QSqlTableModel::OnFieldChange);
@@ -32,7 +33,7 @@ void MainWindow::load_match_mentees()
         model_match_mentors->fetchMore();
     }
 
-    // link mentors QSqlTableModel to QTableView
+    // link mentors QSqlTableModel to QTableView(QSqlTableModel to QTableView)
     ui->tableView_match_mentors->setModel(model_match_mentors);
     ui->tableView_match_mentors->reset();
     ui->tableView_match_mentors->horizontalHeader()->setMaximumSectionSize(400);
@@ -42,7 +43,7 @@ void MainWindow::load_match_mentees()
     ui->tableView_match_mentors->setSelectionMode(QAbstractItemView::MultiSelection);
     ui->tableView_match_mentors->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-    // delegate
+    // delegate(The function of delegate is to decide show number or specific name)
     ui->tableView_match_mentors->setItemDelegateForColumn(1,delegate_yes_no);
     ui->tableView_match_mentors->setItemDelegateForColumn(17,delegate_yes_no);
     ui->tableView_match_mentors->setItemDelegateForColumn(18,delegate_yes_no);
@@ -59,8 +60,7 @@ void MainWindow::load_match_mentees()
     // resize row height according to column width
     ui->tableView_match_mentors->resizeColumnsToContents();
     ui->tableView_match_mentors->resizeRowsToContents();
-    //connect(ui->tableView_match_mentors->horizontalHeader(),&QHeaderView::sectionResized,
-    //        ui->tableView_match_mentors,&QTableView::resizeRowsToContents);
+
 
     ui->tableView_match_mentors->hideColumn(0);
     ui->tableView_match_mentors->hideColumn(1);
